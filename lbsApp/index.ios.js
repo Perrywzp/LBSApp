@@ -100,7 +100,7 @@ class lbsApp extends Component {
             break;
     }
 
-    return <ToiletPage/>;
+    return view;
   }
 }
 

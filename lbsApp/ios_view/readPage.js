@@ -7,23 +7,95 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  ScrollView,
+  TextInput,
+  NavigatorIOS
 } from 'react-native';
 
+import Util from './util';
 
-class ReadPage extends Component{
-  render() {
+import Category from './read/category';
+import List from './read/list';
+import Recommend from './read/recommend';
+import Search from './read/search';
+import Topic from './read/topic';
+
+
+
+
+class Hr extends Component{
+  render(){
     return (
-      <View>
-        <Text style={styles.text}>阅读</Text>
-      </View>
+        <View>
+          <View style={styles.hr}></View>
+        </View>
     );
   }
 }
 
+
+class Read extends Component{
+  render(){
+    return (
+      <NavigatorIOS
+
+        initialRoute={{
+          component: ReadPage,
+          title: '阅读',
+          navigationBarHidden:true
+        }}
+        style={{flex: 1}}
+      />
+    )
+  }
+}
+
+
+class ReadPage extends Component {
+  constructor() {
+    super();
+    this.state = {
+      isShow: false
+    };
+  }
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <Search/>
+        <Hr/>
+        {
+          this.state.isShow ?
+            <ScrollView style={styles.container}>
+              <Topic/>
+              <Hr/>
+              <Recommend/>
+              <Category/>
+              <Recommend/>
+            </ScrollView>
+            : null
+        }
+
+      </View>
+    );
+  }
+
+  // TODO : fetch data
+  componentDidMount() {
+    this.setState({isShow:true});
+  }
+
+}
+
 var styles = StyleSheet.create({
-  text:{
-    fontSize:60
+  container:{
+      flex:1
+  },
+  hr:{
+    borderColor:'#F0F0F0',
+    borderWidth: Util.pixel,
+    marginTop:10
   }
 });
 

@@ -2,9 +2,10 @@
  * Created by perry on 16/11/13.
  */
 var express = require('express'),
+  path = require('path'),
   router = express.Router(),
   fs = require('fs'),
-  PATH = './public/data/';
+  PATH = path.normalize(__dirname+'../../../public/data/');
 
 module.exports = function (app) {
   app.use('/data', router);
@@ -16,12 +17,12 @@ module.exports = function (app) {
 //data/read?type=it
 //data/read?type=it.json
 router.get('/read', function (req, res, next) {
-  if (!req.session.user) {
+  /*if (!req.session.user) {
     return res.send({
       status: 0,
       info: '未鉴权认证'
     });
-  }
+  }*/
   var type = req.param('type') || '';
   fs.readFile(PATH + type + '.json', (err, data)=> {
     if (err) {

@@ -4,26 +4,25 @@
 import React, {Component} from 'react';
 
 import {
-  AppRegistry,
   StyleSheet,
-  Text,
   View
 } from 'react-native';
 
+import TWebView from './tWebView';
 
 class WeatherPage extends Component{
   render() {
     return (
-      <View>
-        <Text style={styles.text}>天气</Text>
+      <View style={styles.container}>
+        <TWebView url="http://localhost:3000/weather.html"/>
       </View>
     );
   }
 }
 
 var styles = StyleSheet.create({
-  text:{
-    fontSize:60
+  container:{
+    flex:1
   }
 });
 

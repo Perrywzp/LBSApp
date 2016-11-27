@@ -1,7 +1,8 @@
 var express = require('express'),
+  path = require('path'),
   router = express.Router(),
   fs = require('fs'),
-  PATH = './public/data/';
+  PATH = path.normalize(__dirname+'../../../public/data/');
 
 module.exports = function (app) {
   app.use('/', router);
@@ -40,7 +41,7 @@ router.get('/edit', function (req, res, next) {
       case 'it':
         obj = {};
         break;
-      case 'manager':
+      case 'manage':
         obj = {};
         break;
       case 'cookies':
@@ -53,7 +54,8 @@ router.get('/edit', function (req, res, next) {
         });
         break;
     }
-    fs.readFile(PATH + type + '.json', (err, data)=>{
+    fs.readFile(PATH + type + '.json',"utf-8", (err, data)=>{
+      console.log(err);
       if(err){
         return res.send({
           status:0,

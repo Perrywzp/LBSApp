@@ -4,14 +4,10 @@
 import React, {Component} from 'react';
 
 import {
-  AppRegistry,
   StyleSheet,
-  Text,
   View,
   TextInput
 } from 'react-native';
-
-import Util from './../util';
 
 class Search extends Component {
   render() {

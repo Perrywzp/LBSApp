@@ -4,38 +4,63 @@
 import React, {Component} from 'react';
 
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
-  Image
+  Image,
+  TouchableOpacity
 } from 'react-native';
 
 
 import Util from './../util';
+import TWebView from './../tWebView';
 
 class Topic extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: props.data
+    }
+  }
+
   render() {
+    var views = [];
+    var data = this.state.data;
+    for(var i in data){
+      views.push(
+        <TouchableOpacity
+          style={styles.img_item} key={i}
+          onPress={this._showWebPage.bind(this, data[i].url,data[i].title)}>
+          <Image resetMode="cover" style={styles.img}
+                 source={{uri:data[i].img}}/>
+        </TouchableOpacity>
+      )
+    }
+
     return (
       <View style={styles.container}>
         <View>
           <Text style={styles.text1}>推荐专题</Text>
         </View>
         <View style={styles.img_view}>
-          <View style={styles.img_item}>
-            <Image resetMode="cover" style={styles.img}
-                   source={{uri: 'http://img.hb.aicdn.com/d205c8f508831b6af989c3bef948dd8a33b0305b17c92f-zj9z3q_fw658'}}></Image>
-          </View>
-          <View style={styles.img_item}>
-            <Image resetMode="cover" style={styles.img}
-                   source={{uri: 'http://mt-share.weddingcloud.me/2014/08/12/b4c9033f074822ebf1fc5aa4f255dc66.jpg?imageView2/2/w/760/q/95'}}></Image>
-          </View>
+          {views}
         </View>
         <View>
           <Text style={styles.text2}>查看更多同期主题&gt;&gt;</Text>
         </View>
       </View>
     );
+  }
+
+  _showWebPage(url,title){
+    this.props.navigator.push({
+      component:TWebView,
+      title:title,
+      passProps:{
+        url:url
+      }
+
+    })
   }
 }
 
@@ -68,7 +93,7 @@ var styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 13,
     fontWeight: '300',
-    marginBottom:10
+    marginBottom: 10
   }
 });
 

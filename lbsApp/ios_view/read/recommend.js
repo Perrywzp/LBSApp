@@ -4,68 +4,67 @@
 import React, {Component} from 'react';
 
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
-  Image
+  Image,
+  TouchableOpacity
 } from 'react-native';
 
 import Util from './../util';
+import TWebView from './../tWebView';
 
 class Recommend extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: props.name,
+      data: props.data
+    }
+  }
+
   render() {
+    var data = this.state.data;
+    var view1 = [];
+    var view2 = [];
+    for (var i in data) {
+      let item = (
+        <TouchableOpacity style={styles.img_item} key={i} onPress={this._showWebPage.bind(this, data[i].url, data[i].title)}>
+          <Image resetMode="cover" style={[styles.img, styles.shadow]}
+                 source={{uri: data[i].img}}/>
+          <Text style={styles.title} numberOfLines={2}>{data[i].title}</Text>
+        </TouchableOpacity>
+      );
+      if (i < 4) {
+        view1.push(item
+        )
+      } else {
+        view2.push(item)
+      }
+    }
     return (
       <View style={styles.container}>
         <View>
-          <Text style={[styles.title_top,styles.text1]}>热门推荐</Text>
+          <Text style={[styles.title_top, styles.text1]}>热门推荐</Text>
         </View>
         <View style={styles.img_view}>
-          <View style={styles.img_item}>
-            <Image resetMode="cover" style={[styles.img, styles.shadow]}
-                   source={{uri: 'http://img.hb.aicdn.com/940ca537ecc2228e674c5dd02378af5224704ea463299-atCXfK_fw658'}}></Image>
-            <Text style={styles.title} numberOfLines={2}>标题xxxxxxxxxxxxxxxxxxx</Text>
-          </View>
-          <View style={styles.img_item}>
-            <Image resetMode="cover" style={[styles.img, styles.shadow]}
-                   source={{uri: 'http://img.hb.aicdn.com/2a86e2a66c86dc36df24d76138ed5aaaf50b81ac4151f-Vug9Y4_fw658'}}></Image>
-            <Text style={styles.title} numberOfLines={2}>标题</Text>
-          </View>
-          <View style={styles.img_item}>
-            <Image resetMode="cover" style={[styles.img, styles.shadow]}
-                   source={{uri: 'http://img.hb.aicdn.com/dba21a9d031cb050a41aac5073178f08c88de598f08c1-t6ziEX_fw658'}}></Image>
-            <Text style={styles.title} numberOfLines={2}>标题</Text>
-          </View>
-          <View style={styles.img_item}>
-            <Image resetMode="cover" style={[styles.img, styles.shadow]}
-                   source={{uri: 'http://img.hb.aicdn.com/65132b0bb3dafdda5b5d2887dd98023491b41fd779150-IqRYfl_fw658'}}></Image>
-            <Text style={styles.title} numberOfLines={2}>标题</Text>
-          </View>
+          {view1}
         </View>
         <View style={styles.img_view}>
-          <View style={styles.img_item}>
-            <Image resetMode="cover" style={[styles.img, styles.shadow]}
-                   source={{uri: 'http://img.hb.aicdn.com/940ca537ecc2228e674c5dd02378af5224704ea463299-atCXfK_fw658'}}></Image>
-            <Text style={styles.title} numberOfLines={2}>标题</Text>
-          </View>
-          <View style={styles.img_item}>
-            <Image resetMode="cover" style={[styles.img, styles.shadow]}
-                   source={{uri: 'http://img.hb.aicdn.com/2a86e2a66c86dc36df24d76138ed5aaaf50b81ac4151f-Vug9Y4_fw658'}}></Image>
-            <Text style={styles.title} numberOfLines={2}>标题</Text>
-          </View>
-          <View style={styles.img_item}>
-            <Image resetMode="cover" style={[styles.img, styles.shadow]}
-                   source={{uri: 'http://img.hb.aicdn.com/dba21a9d031cb050a41aac5073178f08c88de598f08c1-t6ziEX_fw658'}}></Image>
-            <Text style={styles.title} numberOfLines={2}>标题</Text>
-          </View>
-          <View style={styles.img_item}>
-            <Image resetMode="cover" style={[styles.img, styles.shadow]}
-                   source={{uri: 'http://img.hb.aicdn.com/65132b0bb3dafdda5b5d2887dd98023491b41fd779150-IqRYfl_fw658'}}></Image>
-            <Text style={styles.title} numberOfLines={2}>标题</Text>
-          </View>
+          {view2}
         </View>
       </View>
     );
+  }
+
+  _showWebPage(url, title){
+    this.props.navigator.push({
+      component:TWebView,
+      title:title,
+      passProps:{
+        url:url
+      }
+    })
   }
 }
 
@@ -92,18 +91,18 @@ var styles = StyleSheet.create({
     shadowColor: '#ccc',
     shadowOffset: {width: 1 * Util.pixel, height: Util.pixel}
   },
-  text1:{
-      color:'#5E5E5E',
-      marginBottom:8,
-      fontSize:16
+  text1: {
+    color: '#5E5E5E',
+    marginBottom: 8,
+    fontSize: 16
   },
-  title_top:{
-    marginTop:10
+  title_top: {
+    marginTop: 10
   },
-  title:{
-    marginTop:4,
-    fontSize:14,
-    color:'#818181'
+  title: {
+    marginTop: 4,
+    fontSize: 14,
+    color: '#818181'
   }
 
 });

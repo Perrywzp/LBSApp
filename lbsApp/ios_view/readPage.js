@@ -16,34 +16,31 @@ import {
 import Util from './util';
 
 import Category from './read/category';
-import List from './read/list';
 import Recommend from './read/recommend';
 import Search from './read/search';
 import Topic from './read/topic';
 
 
-
-
-class Hr extends Component{
-  render(){
+class Hr extends Component {
+  render() {
     return (
-        <View>
-          <View style={styles.hr}></View>
-        </View>
+      <View>
+        <View style={styles.hr}></View>
+      </View>
     );
   }
 }
 
 
-class Read extends Component{
-  render(){
+class Read extends Component {
+  render() {
     return (
       <NavigatorIOS
 
         initialRoute={{
           component: ReadPage,
           title: '阅读',
-          navigationBarHidden:true
+          navigationBarHidden: true
         }}
         style={{flex: 1}}
       />
@@ -53,8 +50,8 @@ class Read extends Component{
 
 
 class ReadPage extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       isShow: false
     };
@@ -67,12 +64,21 @@ class ReadPage extends Component {
         <Hr/>
         {
           this.state.isShow ?
-            <ScrollView style={styles.container}>
-              <Topic/>
+            <ScrollView style={[styles.container, {paddingTop: 10}]}>
+              <Topic data={this.state.recommendTopic} navigator={this.props.navigator}/>
               <Hr/>
-              <Recommend/>
-              <Category/>
-              <Recommend/>
+              <Recommend
+                name="热门推荐"
+                data={this.state.hotTopic}
+                navigator={this.props.navigator}/>
+              <Category
+                data={this.state.category}
+                navigator={this.props.navigator}/>
+              <Recommend
+                name="清新一刻"
+                data={this.state.other}
+                navigator={this.props.navigator}/>
+              <View style={{height: 50}}></View>
             </ScrollView>
             : null
         }
@@ -83,21 +89,39 @@ class ReadPage extends Component {
 
   // TODO : fetch data
   componentDidMount() {
-    this.setState({isShow:true});
+    var that = this;
+    Util.get('http://localhost:3000/data/read?type=config', function (data) {
+      if (data) {
+        let obj = data.data;
+        let hotTopic = obj.hotTopic;
+        let recommendTopic = obj.recommendTopic;
+        let category = obj.category;
+        let other = obj.other;
+        that.setState({
+          isShow: true,
+          hotTopic: hotTopic,
+          recommendTopic: recommendTopic,
+          category: category,
+          other: other,
+        });
+      }
+    }, function (err) {
+
+    })
   }
 
 }
 
 var styles = StyleSheet.create({
-  container:{
-      flex:1
+  container: {
+    flex: 1
   },
-  hr:{
-    borderColor:'#F0F0F0',
+  hr: {
+    borderColor: '#F0F0F0',
     borderWidth: Util.pixel,
-    marginTop:10
+    marginTop: 10
   }
 });
 
 
-module.exports = ReadPage;
+module.exports = Read;
